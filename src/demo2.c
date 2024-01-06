@@ -3,14 +3,14 @@
 #include <util/delay.h>
 
 int main (void) {
-    DDRB = (1<<PB4);
-    PORTB = (1<<PB4);
+    DDRB |= (1<<PB4);
+    PORTB |= (1<<PB4);
 
     while (1) {
         _delay_ms(500);
-        PORTB = (0<<PB4);
+        PORTB &= ~(1<<PB4);
         _delay_ms(500);
-        PORTB = (1<<PB4);
+        PORTB |= (1<<PB4);
     }
     return 0;
 }
