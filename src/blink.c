@@ -5,12 +5,15 @@
 int main (void) {
     DDRB |= (1<<PB4);
     PORTB |= (1<<PB4);
+    uint8_t i = 0;
 
-    while (1) {
-        _delay_ms(1000);
+    while (i <= 30) {
+        _delay_ms(16000);
         PORTB &= ~(1<<PB4);
-        _delay_ms(1000);
+        _delay_ms(16000);
         PORTB |= (1<<PB4);
+        i++;
     }
+
     return 0;
 }
