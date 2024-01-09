@@ -1,3 +1,10 @@
+/*
+    pwrdn.c
+    Power Down: 1 of the 3 basic types of low power mode for ATtiny85
+    See adcnr.c for comments
+*/
+
+
 #define __AVR_ATtiny85__
 #include <avr/io.h>
 #include <util/delay.h>
@@ -21,5 +28,6 @@ int main (void) {
     MCUCR |= (1<<SE);
     MCUCR |= (1<<SM1);
     __asm__ __volatile__ ( "sleep" "\n\t" :: );
+    // 0.0 mA ... a real power down!
     return 0;
 }
