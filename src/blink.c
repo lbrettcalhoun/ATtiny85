@@ -16,10 +16,10 @@ int main (void) {
     uint8_t i = 0;
     // Delay will depend on clock prescale and division. About 8 secs if using no prescale and division of 1.
     while (i <= 30) {
-        _delay_ms(16000);
+        _delay_ms(65600);
         // Use bit shift, logical AND, and complement to set pin 4 low (clear bit)
         PORTB &= ~(1<<PB4);
-        _delay_ms(16000);
+        _delay_ms(65600);
         // And set pin 4 back to high
         PORTB |= (1<<PB4);
         i++;
