@@ -40,42 +40,20 @@ int main (void) {
     PORTB |= (1<<PB4);
     // Enable Timer0 and set it to prescalar 1024
     TCCR0B |= (1<<CS02) | (1<<CS00);
-    // Option 2: 5 secs = 152 Timer0 overflows 
-    while (count <= 312) {
-        // Check to see if TOV0 set (overflow)
+    // Infinite loop
+    while (1) { 
+        // Check to see if overflow flag is set
         if (TIFR & (1<<TOV0)) {
             count++;
-            // Reset TOV0 ... write 1 to register
+            // Got to manually clear overflow flag
             TIFR |= (1<<TOV0);
+            // Option 2: 5 secs = 152 Timer0 overflows
+            if (count == 152) {
+                // Toggle pin 4
+                PORTB ^= (1<<PB4);
+                // Start it all over
+                count = 0;        
+            }
         }
     }
-    // Toggle PINB4 
-    PORTB ^= (1<<PB4);
-    count = 0;
-
-    while (count <= 312) {
-        // Check to see if TOV0 set (overflow)
-        if (TIFR & (1<<TOV0)) {
-            count++;
-            // Reset TOV0 ... write 1 to register
-            TIFR |= (1<<TOV0);
-        }
-    }
-    // Toggle PINB4 
-    PORTB ^= (1<<PB4);
-    count = 0;
-
-    while (count <= 312) {
-        // Check to see if TOV0 set (overflow)
-        if (TIFR & (1<<TOV0)) {
-            count++;
-            // Reset TOV0 ... write 1 to register
-            TIFR |= (1<<TOV0);
-        }
-    }
-    // Toggle PINB4 
-    PORTB ^= (1<<PB4);
-    count = 0;
-
-    return 0;
-}
+ }
