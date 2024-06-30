@@ -2,7 +2,7 @@ CC:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-gcc.exe
 OBCP:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-objcopy.exe
 DIR:=C:\users\Brett\ATTINY85
 
-all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0norm.hex
+all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0norm.hex t0over.hex
 adcnr.o: adcnr.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\adcnr.c -o $(DIR)\output\adcnr.o
 adcnr.elf: adcnr.o
@@ -45,6 +45,12 @@ t0norm.elf: t0norm.o
 	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0norm.o -o $(DIR)\output\t0norm.elf
 t0norm.hex: t0norm.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0norm.elf $(DIR)\output\t0norm.hex
+t0over.o: t0over.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0over.c -o $(DIR)\output\t0over.o
+t0over.elf: t0over.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0over.o -o $(DIR)\output\t0over.elf
+t0over.hex: t0over.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0over.elf $(DIR)\output\t0over.hex
 
 demo.c:
 demo2.c:
@@ -53,5 +59,6 @@ idle.c:
 adcnr.c:
 pwrdn.c:
 t0norm.c:
+t0over.c:
 clean:
 	del $(DIR)\output\*.*
