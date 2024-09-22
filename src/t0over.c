@@ -32,8 +32,8 @@ uint16_t count = 0;
 ISR (TIMER0_OVF_vect) {
     count++;
 
-    // Option 2: 10 mins = 18310 Timer0 overflows
-    if (count == 18310) {
+    // Option 2: 1 mins = 1831 Timer0 overflows
+    if (count == 1831) {
         // Toggle pin 4
         PORTB ^= (1<<PB4);
         // Start it all over

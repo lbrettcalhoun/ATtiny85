@@ -2,7 +2,7 @@ CC:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-gcc.exe
 OBCP:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-objcopy.exe
 DIR:=C:\users\Brett\ATTINY85
 
-all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0norm.hex t0over.hex
+all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex
 adcnr.o: adcnr.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\adcnr.c -o $(DIR)\output\adcnr.o
 adcnr.elf: adcnr.o
@@ -39,6 +39,18 @@ pwrdn.elf: pwrdn.o
 	$(CC) -g -mmcu=attiny85 $(DIR)\output\pwrdn.o -o $(DIR)\output\pwrdn.elf
 pwrdn.hex: pwrdn.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\pwrdn.elf $(DIR)\output\pwrdn.hex
+t0adcnr.o: t0adcnr.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0adcnr.c -o $(DIR)\output\t0adcnr.o
+t0adcnr.elf: t0adcnr.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0adcnr.o -o $(DIR)\output\t0adcnr.elf
+t0adcnr.hex: t0adcnr.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0adcnr.elf $(DIR)\output\t0adcnr.hex
+t0idle.o: t0idle.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0idle.c -o $(DIR)\output\t0idle.o
+t0idle.elf: t0idle.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0idle.o -o $(DIR)\output\t0idle.elf
+t0idle.hex: t0idle.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0idle.elf $(DIR)\output\t0idle.hex
 t0norm.o: t0norm.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0norm.c -o $(DIR)\output\t0norm.o
 t0norm.elf: t0norm.o
@@ -51,6 +63,13 @@ t0over.elf: t0over.o
 	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0over.o -o $(DIR)\output\t0over.elf
 t0over.hex: t0over.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0over.elf $(DIR)\output\t0over.hex
+t0pwrdn.o: t0pwrdn.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0pwrdn.c -o $(DIR)\output\t0pwrdn.o
+t0pwrdn.elf: t0pwrdn.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0pwrdn.o -o $(DIR)\output\t0pwrdn.elf
+t0pwrdn.hex: t0pwrdn.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0pwrdn.elf $(DIR)\output\t0pwrdn.hex
+
 
 demo.c:
 demo2.c:
@@ -58,7 +77,10 @@ blink.c:
 idle.c:
 adcnr.c:
 pwrdn.c:
+t0adcnr.c:
+t0idle.c:
 t0norm.c:
 t0over.c:
+t0pwrdn.c:
 clean:
 	del $(DIR)\output\*.*
