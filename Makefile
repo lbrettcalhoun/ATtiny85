@@ -2,7 +2,7 @@ CC:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-gcc.exe
 OBCP:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-objcopy.exe
 DIR:=C:\users\Brett\ATTINY85
 
-all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex
+all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex t0wake.hex wdtwake.hex
 adcnr.o: adcnr.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\adcnr.c -o $(DIR)\output\adcnr.o
 adcnr.elf: adcnr.o
@@ -69,7 +69,18 @@ t0pwrdn.elf: t0pwrdn.o
 	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0pwrdn.o -o $(DIR)\output\t0pwrdn.elf
 t0pwrdn.hex: t0pwrdn.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0pwrdn.elf $(DIR)\output\t0pwrdn.hex
-
+t0wake.o: t0wake.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0wake.c -o $(DIR)\output\t0wake.o
+t0wake.elf: t0wake.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0wake.o -o $(DIR)\output\t0wake.elf
+t0wake.hex: t0wake.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0wake.elf $(DIR)\output\t0wake.hex
+wdtwake.o: wdtwake.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\wdtwake.c -o $(DIR)\output\wdtwake.o
+wdtwake.elf: wdtwake.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\wdtwake.o -o $(DIR)\output\wdtwake.elf
+wdtwake.hex: wdtwake.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\wdtwake.elf $(DIR)\output\wdtwake.hex
 
 demo.c:
 demo2.c:
@@ -82,5 +93,7 @@ t0idle.c:
 t0norm.c:
 t0over.c:
 t0pwrdn.c:
+t0wake.c:
+wdtwake.c:
 clean:
 	del $(DIR)\output\*.*
