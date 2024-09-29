@@ -1,6 +1,6 @@
 /*
     wdt_wake.c
-    Wake the ATTiny85 after 1 minutes of sleep (1 mins sleep, then wake)
+    Wake the ATTiny85 after 10 minutes of sleep (10 mins sleep, then wake, 1 min on, repeat)
 
     6.38 mA when on, 0.00 mA when sleeping
 
@@ -16,10 +16,15 @@ WDT: 128 kHz, 8 sec overflow: WDP3 = 1, WDP0 = 1
 #endif
 #include <avr/io.h>
 #include <avr/interrupt.h>
-volatile uint8_t count;
+volatile uint8_t wdtcount, idle = 0;
+volatile uint16_t t0count = 0;
 
 ISR (WDT_vect) {
+    wdtcount++;
+}
 
+ISR (TIMER0_OVF_vect) {
+    t0count++;
 }
 
 int main (void) {
@@ -33,17 +38,42 @@ int main (void) {
     WDTCR &= ~(1<<WDE);
     WDTCR |= (1<<WDIE);
     WDTCR |= (1<<WDP3) | (1<<WDP0);
+    // Enable Timer0 and set it to prescalar 1024
+    TCCR0B |= (1<<CS02) | (1<<CS00);
+    TIFR |= (1<<TOV0);
+    TIMSK |= (1<<TOIE0);
     // Enable global interrupts
     sei();
     // Go to sleep
     MCUCR |= (1<<SE);
     MCUCR |= (1<<SM1);  // Idle
+    idle = 1;
     __asm__ __volatile__ ( "sleep" "\n\t" :: );
-    
-    while (count < 8) { 
-        count++;
-        __asm__ __volatile__ ( "sleep" "\n\t" :: );
+
+    while (1) {
+        if (idle) {
+            if (wdtcount == 70) {
+                wdtcount = 0;
+                PORTB |= (1<<PB4);
+                t0count = 0;
+                idle = 0;
+            }
+            else {
+                PORTB &= ~(1<<PB4);
+                __asm__ __volatile__ ( "sleep" "\n\t" :: );
+            }
+        }
+        else {
+            if (t0count == 1831) {
+                t0count = 0;
+                PORTB &= ~(1<<PB4);
+                idle = 1;
+                wdtcount = 0;
+                __asm__ __volatile__ ( "sleep" "\n\t" :: );
+            }
+            else {
+                PORTB |= (1<<PB4);
+            }
+        }
     }
-    PORTB |= (1<<PB4);
-    return 0;    
- }
+ }  
