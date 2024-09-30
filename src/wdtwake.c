@@ -1,8 +1,8 @@
 /*
     wdt_wake.c
-    Wake the ATTiny85 after 10 minutes of sleep (10 mins sleep, then wake, 1 min on, repeat)
+    Wake the ATTiny85 after 10 minutes of power down sleep (10 mins sleep, then wake, 1 min on, repeat)
 
-    6.38 mA when on, 0.00 mA when sleeping
+    10 mA when on, 17 uA when sleeping
 
 */
 /*

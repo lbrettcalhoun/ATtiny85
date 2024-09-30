@@ -1,13 +1,10 @@
 /*
     timer0_wake.c
-    Implement a simple 1 min delay using Timer0 with overflow and ISR.
+    Implement a simple 1 min idle sleep using Timer0 with overflow and ISR.
     Wake the ATTiny85 after 1 minutes of sleep (1 mins sleep, then wake)
 
-    6.38 mA when on, 0.00 mA when sleeping
-
-
-    DOES NOT WORK! CANNOT use Timer0 overflow to wake from idle because
-    the peripheral clock is NOT running!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    Note: Only works with IDLE sleep ... will not work with ADC Noise
+    Reduction or Power down
 
 */
 /*
@@ -26,16 +23,11 @@ volatile uint16_t count;
 
 ISR (TIMER0_OVF_vect) {
     count++;
-    if (count == 183) {
-        count = 0;
-        MCUCR &= ~(1<<SE);
-    }
 }
 
 int main (void) {
-    // Set the data direction register for pin 4 to be an output pin
+    // Setup PB4
     DDRB |= (1<<PB4);
-    // Set pin 4 to low
     PORTB &= ~(1<<PB4);
     // Enable Timer0 and set it to prescalar 1024
     TCCR0B |= (1<<CS02) | (1<<CS00);
@@ -45,16 +37,22 @@ int main (void) {
     sei();
     // Enable the Timer0 overflow interrupt
     TIMSK |= (1<<TOIE0);
-    // Enable general pin change interrupt
-    GIMSK |= (1<<PCIE);
-    // Enable PCINT4 interrupt
-    PCMSK |= (1<<PCINT4);
-    // Go to sleep
+    // Disable Analog Comparator for even more power saving in idle mode
+    ACSR &= ~(1<<ACIE);
+    ACSR |= (1<<ACD);
+    // Go to sleep (just idle ... not ADCNR or PDWN)
     MCUCR |= (1<<SE);
-    MCUCR |= (1<<SM1);
+    MCUCR &= ~(1<<SM1) & ~(1<<SM0);
     __asm__ __volatile__ ( "sleep" "\n\t" :: );
     
     while (1) { 
-        ;
+        if (count == 1831) {
+            count = 0;
+            PORTB |= (1<<PB4);
+            return 0;
+        }
+        else {
+            __asm__ __volatile__ ( "sleep" "\n\t" :: );
+        }
     }
  }

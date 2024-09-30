@@ -1,7 +1,7 @@
 /*
     timer0_adcnr.c
-    Implement a simple 1 min delay using Timer0 with overflow and ISR.
-    Put the ATTiny85 to sleep for 1 minutes (1 mins on, then sleep)
+    Implement a simple sleep using Timer0 with overflow and ISR.
+    Put the ATTiny85 to sleep after 1 minutes (1 mins on, then sleep)
 
     6.38 mA when on, 2.12 mA when sleeping
 
@@ -18,7 +18,7 @@
 #endif
 #include <avr/io.h>
 #include <avr/interrupt.h>
-uint16_t count = 0;
+volatile uint16_t count = 0;
 
 ISR (TIMER0_OVF_vect) {
     count++;
@@ -42,6 +42,7 @@ int main (void) {
     TIMSK |= (1<<TOIE0);
     // Enable sleep
     MCUCR |= (1<<SE);
+    MCUCR &= ~(1<<SM1);
     MCUCR |= (1<<SM0);
 
     while (1) { 
