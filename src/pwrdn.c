@@ -5,7 +5,10 @@
 */
 
 
-#define __AVR_ATtiny85__
+#ifndef __AVR_ATtiny85__
+  #define __AVR_ATtiny85__
+#endif
+#define F_CPU 8000000
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -15,19 +18,19 @@ int main (void) {
     uint8_t i = 0;
 
     while (i <= 10) {
-        _delay_ms(16000);
+        _delay_ms(8000);
         PORTB &= ~(1<<PB4);
-        _delay_ms(16000);
+        _delay_ms(8000);
         PORTB |= (1<<PB4);
         i++;
     }
-    _delay_ms(64000);
+    _delay_ms(30000);
     PORTB &= ~(1<<PB4);
-    _delay_ms(64000);
+    _delay_ms(30000);
 
     MCUCR |= (1<<SE);
     MCUCR |= (1<<SM1);
     __asm__ __volatile__ ( "sleep" "\n\t" :: );
-    // 0.0 mA ... a real power down!
+    // 17 uA ... a real power down!
     return 0;
 }

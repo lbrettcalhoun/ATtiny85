@@ -1,4 +1,6 @@
-#define __AVR_ATtiny85__
+#ifndef __AVR_ATtiny85__
+  #define __AVR_ATtiny85__
+#endif
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
