@@ -2,7 +2,7 @@ CC:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-gcc.exe
 OBCP:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-objcopy.exe
 DIR:=C:\users\Brett\ATTINY85
 
-all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex t0wake.hex wdtwake.hex
+all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex eepromw.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex t0wake.hex wdtwake.hex
 adcnr.o: adcnr.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\adcnr.c -o $(DIR)\output\adcnr.o
 adcnr.elf: adcnr.o
@@ -27,6 +27,12 @@ demo.hex: demo.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\demo.elf $(DIR)\output\demo.hex
 demo2.hex: demo2.elf
 	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\demo2.elf $(DIR)\output\demo2.hex
+eepromw.o: eepromw.c
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\eepromw.c -o $(DIR)\output\eepromw.o
+eepromw.elf: eepromw.o
+	$(CC) -g -mmcu=attiny85 $(DIR)\output\eepromw.o -o $(DIR)\output\eepromw.elf
+eepromw.hex: eepromw.elf
+	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\eepromw.elf $(DIR)\output\eepromw.hex
 idle.o: idle.c
 	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\idle.c -o $(DIR)\output\idle.o
 idle.elf: idle.o
@@ -87,6 +93,7 @@ demo2.c:
 blink.c:
 idle.c:
 adcnr.c:
+eepromw.c:
 pwrdn.c:
 t0adcnr.c:
 t0idle.c:
