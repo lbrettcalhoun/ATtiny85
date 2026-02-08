@@ -1,92 +1,102 @@
-CC:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-gcc.exe
-OBCP:=C:\avr8-gnu-toolchain-win32_x86_64\bin\avr-objcopy.exe
-DIR:=C:\users\Brett\ATTINY85
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+	CC:=/usr/bin/avr-gcc
+	OBCP:=/usr/bin/avr-objcopy
+	DIR:=/home/brett/Documents/ATtiny85
+	DEL:=rm
+else
+	CC:=C:/avr8-gnu-toolchain-win32_x86_64/bin/avr-gcc.exe
+	OBCP:=C:/avr8-gnu-toolchain-win32_x86_64/bin/avr-objcopy.exe
+	DIR:=C:/users/Brett/ATTINY85
+	DEL:=del
+endif
 
 all: demo.hex demo2.hex blink.hex idle.hex adcnr.hex eepromw.hex pwrdn.hex t0adcnr.hex t0idle.hex t0norm.hex t0over.hex t0pwrdn.hex t0wake.hex wdtwake.hex
 adcnr.o: adcnr.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\adcnr.c -o $(DIR)\output\adcnr.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/adcnr.c -o $(DIR)/output/adcnr.o
 adcnr.elf: adcnr.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\adcnr.o -o $(DIR)\output\adcnr.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/adcnr.o -o $(DIR)/output/adcnr.elf
 adcnr.hex: adcnr.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\adcnr.elf $(DIR)\output\adcnr.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/adcnr.elf $(DIR)/output/adcnr.hex
 blink.o: blink.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\blink.c -o $(DIR)\output\blink.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/blink.c -o $(DIR)/output/blink.o
 blink.elf: blink.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\blink.o -o $(DIR)\output\blink.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/blink.o -o $(DIR)/output/blink.elf
 blink.hex: blink.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\blink.elf $(DIR)\output\blink.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/blink.elf $(DIR)/output/blink.hex
 demo.o: demo.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\demo.c -o $(DIR)\output\demo.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/demo.c -o $(DIR)/output/demo.o
 demo2.o: demo2.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\demo2.c -o $(DIR)\output\demo2.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/demo2.c -o $(DIR)/output/demo2.o
 demo.elf: demo.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\demo.o -o $(DIR)\output\demo.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/demo.o -o $(DIR)/output/demo.elf
 demo2.elf: demo2.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\demo2.o -o $(DIR)\output\demo2.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/demo2.o -o $(DIR)/output/demo2.elf
 demo.hex: demo.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\demo.elf $(DIR)\output\demo.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/demo.elf $(DIR)/output/demo.hex
 demo2.hex: demo2.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\demo2.elf $(DIR)\output\demo2.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/demo2.elf $(DIR)/output/demo2.hex
 eepromw.o: eepromw.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\eepromw.c -o $(DIR)\output\eepromw.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/eepromw.c -o $(DIR)/output/eepromw.o
 eepromw.elf: eepromw.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\eepromw.o -o $(DIR)\output\eepromw.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/eepromw.o -o $(DIR)/output/eepromw.elf
 eepromw.hex: eepromw.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\eepromw.elf $(DIR)\output\eepromw.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/eepromw.elf $(DIR)/output/eepromw.hex
 idle.o: idle.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\idle.c -o $(DIR)\output\idle.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/idle.c -o $(DIR)/output/idle.o
 idle.elf: idle.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\idle.o -o $(DIR)\output\idle.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/idle.o -o $(DIR)/output/idle.elf
 idle.hex: idle.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\idle.elf $(DIR)\output\idle.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/idle.elf $(DIR)/output/idle.hex
 pwrdn.o: pwrdn.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\pwrdn.c -o $(DIR)\output\pwrdn.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/pwrdn.c -o $(DIR)/output/pwrdn.o
 pwrdn.elf: pwrdn.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\pwrdn.o -o $(DIR)\output\pwrdn.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/pwrdn.o -o $(DIR)/output/pwrdn.elf
 pwrdn.hex: pwrdn.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\pwrdn.elf $(DIR)\output\pwrdn.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/pwrdn.elf $(DIR)/output/pwrdn.hex
 t0adcnr.o: t0adcnr.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0adcnr.c -o $(DIR)\output\t0adcnr.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0adcnr.c -o $(DIR)/output/t0adcnr.o
 t0adcnr.elf: t0adcnr.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0adcnr.o -o $(DIR)\output\t0adcnr.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0adcnr.o -o $(DIR)/output/t0adcnr.elf
 t0adcnr.hex: t0adcnr.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0adcnr.elf $(DIR)\output\t0adcnr.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0adcnr.elf $(DIR)/output/t0adcnr.hex
 t0idle.o: t0idle.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0idle.c -o $(DIR)\output\t0idle.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0idle.c -o $(DIR)/output/t0idle.o
 t0idle.elf: t0idle.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0idle.o -o $(DIR)\output\t0idle.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0idle.o -o $(DIR)/output/t0idle.elf
 t0idle.hex: t0idle.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0idle.elf $(DIR)\output\t0idle.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0idle.elf $(DIR)/output/t0idle.hex
 t0norm.o: t0norm.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0norm.c -o $(DIR)\output\t0norm.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0norm.c -o $(DIR)/output/t0norm.o
 t0norm.elf: t0norm.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0norm.o -o $(DIR)\output\t0norm.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0norm.o -o $(DIR)/output/t0norm.elf
 t0norm.hex: t0norm.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0norm.elf $(DIR)\output\t0norm.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0norm.elf $(DIR)/output/t0norm.hex
 t0over.o: t0over.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0over.c -o $(DIR)\output\t0over.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0over.c -o $(DIR)/output/t0over.o
 t0over.elf: t0over.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0over.o -o $(DIR)\output\t0over.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0over.o -o $(DIR)/output/t0over.elf
 t0over.hex: t0over.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0over.elf $(DIR)\output\t0over.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0over.elf $(DIR)/output/t0over.hex
 t0pwrdn.o: t0pwrdn.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0pwrdn.c -o $(DIR)\output\t0pwrdn.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0pwrdn.c -o $(DIR)/output/t0pwrdn.o
 t0pwrdn.elf: t0pwrdn.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0pwrdn.o -o $(DIR)\output\t0pwrdn.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0pwrdn.o -o $(DIR)/output/t0pwrdn.elf
 t0pwrdn.hex: t0pwrdn.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0pwrdn.elf $(DIR)\output\t0pwrdn.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0pwrdn.elf $(DIR)/output/t0pwrdn.hex
 t0wake.o: t0wake.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\t0wake.c -o $(DIR)\output\t0wake.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/t0wake.c -o $(DIR)/output/t0wake.o
 t0wake.elf: t0wake.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\t0wake.o -o $(DIR)\output\t0wake.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/t0wake.o -o $(DIR)/output/t0wake.elf
 t0wake.hex: t0wake.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\t0wake.elf $(DIR)\output\t0wake.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/t0wake.elf $(DIR)/output/t0wake.hex
 wdtwake.o: wdtwake.c
-	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)\src\wdtwake.c -o $(DIR)\output\wdtwake.o
+	$(CC) -g -Os -mmcu=attiny85 -c $(DIR)/src/wdtwake.c -o $(DIR)/output/wdtwake.o
 wdtwake.elf: wdtwake.o
-	$(CC) -g -mmcu=attiny85 $(DIR)\output\wdtwake.o -o $(DIR)\output\wdtwake.elf
+	$(CC) -g -mmcu=attiny85 $(DIR)/output/wdtwake.o -o $(DIR)/output/wdtwake.elf
 wdtwake.hex: wdtwake.elf
-	$(OBCP) -j .text -j .data -O ihex $(DIR)\output\wdtwake.elf $(DIR)\output\wdtwake.hex
+	$(OBCP) -j .text -j .data -O ihex $(DIR)/output/wdtwake.elf $(DIR)/output/wdtwake.hex
 
 demo.c:
 demo2.c:
@@ -103,4 +113,4 @@ t0pwrdn.c:
 t0wake.c:
 wdtwake.c:
 clean:
-	del $(DIR)\output\*.*
+	$(DEL) $(DIR)/output/*.*
